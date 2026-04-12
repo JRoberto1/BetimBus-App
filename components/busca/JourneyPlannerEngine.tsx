@@ -56,7 +56,7 @@ export default function JourneyPlannerEngine() {
 
 
   // Lógica pesada de Roteamento (Interseção Direta)
-  const rotasViaveis = useMemo(() => {
+  const roteamento = useMemo(() => {
     if (!destinoStop) return null;
 
     let linhasNaOrigem = new Set<string>();
@@ -76,9 +76,31 @@ export default function JourneyPlannerEngine() {
     const linhasNoDestino = new Set(destinoStop.lines);
 
     // Interseção direta
-    const intersection = Array.from(linhasNaOrigem).filter(i => linhasNoDestino.has(i));
+    const diretas = Array.from(linhasNaOrigem).filter(i => linhasNoDestino.has(i));
+    const transbordos: { linhaOrigem: string, pontoTroca: Stop, linhaDestino: string }[] = [];
 
-    return intersection;
+    // Motor O(N) para baldeação: Encontrar ponto focal comum se direto falhar
+    if (diretas.length === 0) {
+      for (const stop of pontos) {
+        if (origemStop && stop.id === origemStop.id) continue;
+        if (stop.id === destinoStop.id) continue;
+        
+        const posOrigens = stop.lines.filter(l => linhasNaOrigem.has(l));
+        const posDestinos = stop.lines.filter(l => linhasNoDestino.has(l));
+        
+        if (posOrigens.length > 0 && posDestinos.length > 0) {
+           transbordos.push({
+              linhaOrigem: posOrigens[0],
+              pontoTroca: stop,
+              linhaDestino: posDestinos[0]
+           });
+           
+           if (transbordos.length >= 6) break; // Trava UI lag e excesso
+        }
+      }
+    }
+
+    return { diretas, transbordos };
 
   }, [origemType, origemStop, location, destinoStop, pontos]);
 
@@ -183,43 +205,83 @@ export default function JourneyPlannerEngine() {
       </div>
 
       {/* Resultados do Motor */}
-      <div className="pt-4 space-y-4">
-        {destinoStop && rotasViaveis && (
+      <div className="pt-4 space-y-4 pb-8">
+        {destinoStop && roteamento && roteamento.diretas.length > 0 && (
            <div className="flex items-center gap-2 px-1">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.8)]"></span>
               <h3 className="text-[11px] font-bold text-white uppercase tracking-widest">
-                Trajetos Diretos Encontrados ({rotasViaveis.length})
+                Trajetos Diretos Encontrados ({roteamento.diretas.length})
               </h3>
            </div>
         )}
 
-        {destinoStop && rotasViaveis && rotasViaveis.length === 0 && (
+        {destinoStop && roteamento && roteamento.diretas.length === 0 && roteamento.transbordos.length === 0 && (
            <div className="surface-card p-6 text-center rounded-xl space-y-3 border-dashed border-[rgba(255,255,255,0.1)]">
              <MapPin className="text-brand-muted mx-auto opacity-50" size={32} />
-             <p className="text-brand-muted text-sm font-medium">Não encontramos uma linha direta cobrindo sua origem e destino exatos sem transbordo.</p>
+             <p className="text-brand-muted text-sm font-medium">Não encontramos rotas diretas ou de baldeação na malha para estes pontos.</p>
            </div>
         )}
 
-        <div className="grid grid-cols-1 gap-3">
-          {rotasViaveis?.map(linha => (
-            <Link 
-              href={`/linhas`} // Pode direcionar pra rota especifica no caso futuramente
-              key={linha} 
-              className="surface-card p-4 rounded-xl flex items-center justify-between group hover:border-brand-primary transition-all duration-200"
-            >
-               <div className="flex items-center gap-4">
-                 <div className="bg-[rgba(0,123,255,0.1)] border border-[rgba(0,123,255,0.2)] px-4 py-2.5 rounded-xl">
-                   <span className="text-xl font-black text-brand-primary">{linha}</span>
+        {destinoStop && roteamento && roteamento.diretas.length > 0 && (
+          <div className="grid grid-cols-1 gap-3">
+            {roteamento.diretas.map(linha => (
+              <Link 
+                href={`/linhas`} 
+                key={linha} 
+                className="surface-card p-4 rounded-xl flex items-center justify-between group hover:border-brand-primary transition-all duration-200"
+              >
+                 <div className="flex items-center gap-4">
+                   <div className="bg-[rgba(0,123,255,0.1)] border border-[rgba(0,123,255,0.2)] px-4 py-2.5 rounded-xl">
+                     <span className="text-xl font-black text-brand-primary">{linha}</span>
+                   </div>
+                   <div className="flex flex-col">
+                     <span className="text-[10px] text-brand-secondary font-bold uppercase tracking-widest">Rota ideal</span>
+                     <span className="text-white text-sm font-medium mt-0.5">Viagem direta</span>
+                   </div>
                  </div>
-                 <div className="flex flex-col">
-                   <span className="text-[10px] text-brand-secondary font-bold uppercase tracking-widest">Rota ideal</span>
-                   <span className="text-white text-sm font-medium mt-0.5">Viagem interbairros</span>
-                 </div>
+                 <ChevronRight className="text-brand-muted group-hover:text-white group-hover:translate-x-1 transition-all" size={20} />
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {/* Transbordos */}
+        {destinoStop && roteamento && roteamento.diretas.length === 0 && roteamento.transbordos.length > 0 && (
+            <div className="space-y-4">
+               <div className="flex items-center gap-2 px-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.8)]"></span>
+                  <h3 className="text-[11px] font-bold text-yellow-500 uppercase tracking-widest">
+                    Transbordos Precisos ({roteamento.transbordos.length})
+                  </h3>
                </div>
-               <ChevronRight className="text-brand-muted group-hover:text-white group-hover:translate-x-1 transition-all" size={20} />
-            </Link>
-          ))}
-        </div>
+               
+               <div className="grid grid-cols-1 gap-3">
+                 {roteamento.transbordos.map((t, idx) => (
+                    <div key={idx} className="surface-card p-4 rounded-xl flex flex-col gap-3 group border border-yellow-500/10 hover:border-yellow-500/30 transition-all">
+                       <div className="flex items-center justify-between px-2">
+                         <div className="bg-[rgba(234,179,8,0.1)] border border-[rgba(234,179,8,0.2)] px-3 py-1.5 rounded-lg text-center flex-1">
+                           <span className="text-xs uppercase text-brand-muted block mb-0.5 font-bold tracking-widest">Embarque</span>
+                           <span className="text-lg font-black text-yellow-500">{t.linhaOrigem}</span>
+                         </div>
+                         <div className="px-3 flex flex-col items-center">
+                           <ArrowDown className="text-zinc-500" size={16} />
+                         </div>
+                         <div className="bg-[rgba(0,242,255,0.1)] border border-[rgba(0,242,255,0.2)] px-3 py-1.5 rounded-lg text-center flex-1">
+                           <span className="text-xs uppercase text-brand-muted block mb-0.5 font-bold tracking-widest">Conecte-se</span>
+                           <span className="text-lg font-black text-brand-secondary">{t.linhaDestino}</span>
+                         </div>
+                       </div>
+                       
+                       <div className="border-t border-[rgba(255,255,255,0.05)] pt-3 mt-1 text-xs text-brand-muted flex flex-col gap-1.5 items-start">
+                          <span className="font-semibold text-white">Desça para a troca neste exato ponto:</span>
+                          <span className="w-full block bg-black/30 p-2.5 rounded-lg font-mono text-[11px] text-zinc-300 leading-snug">{t.pontoTroca.name}</span>
+                       </div>
+                    </div>
+                 ))}
+               </div>
+            </div>
+        )}
+
       </div>
 
     </div>
