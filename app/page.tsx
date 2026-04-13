@@ -7,16 +7,14 @@ import PontosHomeWrapper from '@/components/pontos/PontosHomeWrapper';
 
 export default function Home() {
   const frequentes = [
-    { id: '3212', num: '3212', nome: 'BETIM / B.H.' },
-    { id: '50', num: '50', nome: 'HOSP. REGIONAL' },
-    { id: '3210', num: '3210', nome: 'BETIM / B.H.' },
-    { id: '40', num: '40', nome: 'C. INCONFIDENTES' },
-    { id: '3220', num: '3220', nome: 'BETIM / B.H.' },
-    { id: '3126', num: '3126', nome: 'BARREIRO' },
-    { id: '60', num: '60', nome: 'NOSSA SRA. FÁTIMA' },
-    { id: '61', num: '61', nome: 'ALTEROSAS' },
-    { id: '70', num: '70', nome: 'BANDEIRINHAS' },
-    { id: '90', num: '90', nome: 'VIANÓPOLIS' },
+    { id: '4evb', num: '50', nome: 'HOSP. REGIONAL' },
+    { id: '4evf', num: '60', nome: 'NOSSA SRA. FÁTIMA' },
+    { id: '4eva', num: '40', nome: 'C. INCONFIDENTES' },
+    { id: '4evh', num: '70', nome: 'BANDEIRINHAS' },
+    { id: '4dqr', num: '131', nome: 'CENTRO / D. BOSCO' },
+    { id: '4dqs', num: '160A', nome: 'PETROVALE' },
+    { id: '4euq', num: '410', nome: 'S. CAETANO / CENTRO' },
+    { id: '4eun', num: '314A', nome: 'DUQUE DE CAXIAS' },
   ];
 
   return (
