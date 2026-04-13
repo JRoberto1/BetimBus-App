@@ -1,6 +1,7 @@
 import { Search, MapPin, Bus, Clock, Bell, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
-import AdSpace from '@/components/ui/AdSpace';
+import { AdSpace } from '@/components/ui/AdSpace';
+import { OpenOnMobileButton } from '@/components/ui/OpenOnMobileButton';
 import FavoritosHomeWrapper from '@/components/favoritos/FavoritosHomeWrapper';
 import PontosHomeWrapper from '@/components/pontos/PontosHomeWrapper';
 
@@ -11,6 +12,7 @@ export default function Home() {
       <header className="bg-brand-bg flex justify-between items-center w-full px-6 py-4 h-16 sticky top-0 z-50">
         <h1 className="text-xl font-black text-brand-primary tracking-tighter uppercase">Betim Bus</h1>
         <div className="flex items-center gap-4">
+          <OpenOnMobileButton />
           <Bell className="text-brand-muted hover:text-white transition-colors" size={20} />
         </div>
       </header>
@@ -53,7 +55,21 @@ export default function Home() {
         </section>
         
         <section className="py-2">
-          <AdSpace />
+          <AdSpace slot="Home_Footer" format="auto" />
+        </section>
+
+        {/* Footer Institucional AdSense */}
+        <section className="pb-8 pt-4 border-t border-[rgba(255,255,255,0.05)] text-center space-y-4">
+           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+             <Link href="/sobre" prefetch={false} className="hover:text-white transition-colors">Sobre</Link>
+             <span>&bull;</span>
+             <Link href="/privacidade" prefetch={false} className="hover:text-white transition-colors">Privacidade</Link>
+             <span>&bull;</span>
+             <Link href="/contato" prefetch={false} className="hover:text-white transition-colors">Contato</Link>
+             <span>&bull;</span>
+             <Link href="/noticias" prefetch={false} className="hover:text-white transition-colors">Notícias</Link>
+           </div>
+           <p className="text-[10px] text-zinc-600">&copy; 2026 FlowIQ. Betim Bus é uma plataforma independente.</p>
         </section>
 
       </div>

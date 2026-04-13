@@ -3,7 +3,7 @@
   "short_name": "Betim Bus",
   "description": "Aplicativo de rastreamento de ônibus de Betim, Minas Gerais.",
   "start_url": "/",
-  "display": "standalone",
+  "display": "minimal-ui",
   "background_color": "#121826",
   "theme_color": "#121826",
   "orientation": "portrait-primary",

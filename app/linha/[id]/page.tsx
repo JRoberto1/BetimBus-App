@@ -8,15 +8,17 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   
   try {
     const info = await getLinhaInfo(id);
-    const title = `Linha ${info.numeroLinha || ''} - ${info.nomeLinha || 'Rota de Ônibus'}`;
-    const description = `Confira os horários, rotas e mapa em tempo real da Linha ${info.numeroLinha || ''} em Betim.`;
+    const num = info.numeroLinha || '';
+    const nome = info.nomeLinha || 'Rota de Ônibus';
+    const title = `Linha ${num} Betim — Horários e Itinerário | Betim Bus`;
+    const description = `Horários, itinerário e rastreamento em tempo real da Linha ${num} — ${nome} em Betim/MG.`;
     
     return {
       title,
       description,
       openGraph: {
-        title,
-        description,
+        title: `Linha ${num} — ${nome} | Betim Bus`,
+        description: `Acompanhe a Linha ${num} de Betim em tempo real.`,
       },
     };
   } catch (e) {

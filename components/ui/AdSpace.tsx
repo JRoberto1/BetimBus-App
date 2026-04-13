@@ -1,13 +1,23 @@
-export default function AdSpace() {
+// components/ui/AdSpace.tsx
+'use client'
+
+interface AdSpaceProps {
+  slot: string
+  format?: 'auto' | 'rectangle' | 'horizontal'
+  className?: string
+}
+
+export function AdSpace({ slot, format = 'auto', className }: AdSpaceProps) {
   return (
-    <div className="w-[320px] h-[50px] bg-brand-surface border border-brand-border flex items-center justify-center rounded overflow-hidden relative">
-      <span className="text-[10px] text-brand-muted uppercase font-bold tracking-widest opacity-50">
-        Espaço Publicitário
-      </span>
-      {/* 
-        Aqui futuramente será injetado o script do Google AdSense.
-        Exemplo: <ins className="adsbygoogle" style={{ display: 'inline-block', width: 320, height: 50 }} ... />
-      */}
+    <div className={`ad-container w-full overflow-hidden flex justify-center py-4 ${className || ''}`}>
+      <ins
+        className="adsbygoogle"
+        style={{ display: 'block' }}
+        data-ad-client="ca-pub-XXXXXXXXXX"
+        data-ad-slot={slot}
+        data-ad-format={format}
+        data-full-width-responsive="true"
+      />
     </div>
-  );
+  )
 }
