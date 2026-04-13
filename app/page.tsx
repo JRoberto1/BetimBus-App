@@ -72,7 +72,7 @@ export default function Home() {
         </section>
 
         {/* Footer Institucional AdSense */}
-        <section className="pb-8 pt-4 border-t border-[rgba(255,255,255,0.05)] text-center space-y-4 md:col-span-2">
+        <section className="pb-8 pt-4 border-t border-[rgba(255,255,255,0.05)] text-center space-y-4 lg:col-span-12">
            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm font-semibold uppercase tracking-wider text-zinc-500">
              <Link href="/sobre" prefetch={false} className="hover:text-[#007BFF] transition-colors">Sobre</Link>
              <span>&bull;</span>
