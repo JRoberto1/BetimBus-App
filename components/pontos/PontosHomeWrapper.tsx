@@ -31,8 +31,8 @@ export default function PontosHomeWrapper() {
       .map(p => ({ ...p, distanceMeters: calculateDistance(location.lat!, location.lon!, p.lat, p.lon) }))
       .sort((a, b) => a.distanceMeters - b.distanceMeters);
       
-    // Returns top 8
-    return sorted.slice(0, 8);
+    // Returns top 4 (as specified: max 4 on desktop, 3 on mobile)
+    return sorted.slice(0, 4);
   }, [pontos, location]);
 
   const hasGps = location.lat && location.lon;
@@ -57,14 +57,14 @@ export default function PontosHomeWrapper() {
         ) : null}
       </div>
 
-      <div className="space-y-3">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
         {pontos.length === 0 ? (
-           <div className="surface-card p-4 text-center">
+           <div className="surface-card p-4 text-center lg:col-span-2">
              <span className="text-brand-muted text-xs animate-pulse">Carregando base de pontos...</span>
            </div>
         ) : closestPoints.length > 0 ? (
           closestPoints.map((closestPoint, index) => (
-            <Link key={closestPoint.id} href={`/pontos/${closestPoint.id}`} prefetch={false} className={`block ${index >= 4 ? 'hidden md:block' : ''}`}>
+            <Link key={closestPoint.id} href={`/pontos/${closestPoint.id}`} prefetch={false} className={`block ${index >= 3 ? 'hidden lg:block' : ''}`}>
               <div className="surface-card p-4 transition-all duration-200 hover:scale-[0.98] group relative overflow-hidden flex flex-col gap-2">
                 <div className="absolute top-0 right-0 p-3 flex flex-col justify-end items-end gap-1">
                   <span className="text-brand-secondary text-sm font-bold tracking-tighter">
@@ -87,7 +87,7 @@ export default function PontosHomeWrapper() {
             </Link>
           ))
         ) : location.error ? (
-          <Link href="/planejar" prefetch={false} className="block">
+          <Link href="/planejar" prefetch={false} className="block lg:col-span-2">
             <div className="surface-card p-5 group flex flex-col items-center justify-center gap-2 text-center border-red-900/30 bg-red-900/10 hover:border-brand-primary transition-all rounded-xl md:hover:scale-[1.02]">
                <MapPin className="text-red-400 group-hover:text-brand-primary transition-colors" size={24} />
                <div>

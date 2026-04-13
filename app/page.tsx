@@ -50,13 +50,13 @@ export default function Home() {
           <div className="space-y-4">
             <h2 className="text-xs font-bold tracking-[0.1em] text-brand-muted uppercase px-1 border-b border-[rgba(255,255,255,0.05)] pb-2">FREQUENTES EM BETIM</h2>
             <div className="grid grid-cols-2 gap-4">
-              {frequentes.map((linha, index) => (
+              {frequentes.slice(0, 8).map((linha, index) => (
                 <Link 
                   key={linha.id} 
                   href={`/linha/${linha.id}`} 
                   prefetch={false} 
                   className={`bg-brand-surface border border-[rgba(255,255,255,0.05)] rounded-xl flex-col items-center justify-center py-6 gap-2 hover:border-[#007BFF] transition-all hover:scale-[1.03] active:scale-95 duration-200 ${
-                    index >= 6 ? 'hidden md:flex' : 'flex'
+                    index >= 4 ? 'hidden lg:flex' : 'flex'
                   }`}
                 >
                   <span className="text-3xl font-black text-white">{linha.num}</span>
