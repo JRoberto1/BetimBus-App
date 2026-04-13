@@ -10,59 +10,61 @@ export default function Home() {
     <div className="flex flex-col min-h-screen pb-24">
       <Header />
 
-      <div className="px-5 pt-6 space-y-8">
+      <div className="px-5 pt-6 space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-8 max-w-7xl mx-auto">
         
-        {/* Busca Original */}
-        <section>
+        {/* Search & Planner - Takes full width on desktop if needed, or left column */}
+        <section className="md:col-span-2 lg:col-span-1 flex flex-col justify-center">
           <Link href="/planejar" prefetch={false} className="block relative group">
-            <div className="w-full bg-brand-surface border border-[rgba(255,255,255,0.05)] rounded-xl py-4 flex items-center justify-center gap-3 shadow-md hover:bg-[#20283A] transition-colors">
-              <Search className="text-brand-secondary" size={20} />
-              <span className="text-white font-medium">Para onde você vai?</span>
+            <div className="w-full bg-brand-surface border border-[rgba(255,255,255,0.05)] rounded-xl py-6 flex items-center justify-center gap-3 shadow-md hover:bg-[#20283A] transition-all hover:scale-[1.02] hover:border-[#007BFF]/50 duration-300 group-hover:shadow-[0_0_20px_rgba(0,123,255,0.2)]">
+              <Search className="text-[#00F2FF] group-hover:scale-110 transition-transform" size={24} />
+              <span className="text-white font-medium text-lg">Para onde você vai?</span>
             </div>
           </Link>
+
+          {/* Favoritos Principal */}
+          <div className="mt-8 space-y-4">
+            <h2 className="hidden md:block text-xs font-bold tracking-[0.1em] text-brand-muted uppercase px-1 border-b border-[rgba(255,255,255,0.05)] pb-2">SUAS LINHAS PRINCIPAIS</h2>
+            <FavoritosHomeWrapper />
+          </div>
         </section>
 
-        {/* Favoritos Principal */}
-        <section className="space-y-4">
-          <FavoritosHomeWrapper />
-        </section>
+        {/* Módulo Embutido de Pontos Próximos and Linhas Frequentes */}
+        <section className="space-y-8 md:col-span-2 lg:col-span-1">
+          <div className="space-y-4">
+            <PontosHomeWrapper />
+          </div>
 
-        {/* Módulo Embutido de Pontos Próximos */}
-        <section className="space-y-4">
-          <PontosHomeWrapper />
-        </section>
-
-        {/* Linhas Frequentes */}
-        <section className="space-y-4">
-          <h2 className="text-xs font-bold tracking-[0.1em] text-brand-muted uppercase px-1 border-b border-[rgba(255,255,255,0.05)] pb-2">FREQUENTES EM BETIM</h2>
-          <div className="grid grid-cols-2 gap-3">
-             <Link href="/linha/3212" prefetch={false} className="surface-card flex flex-col items-center justify-center py-5 gap-2 hover:border-brand-primary transition-colors hover:scale-[0.98] active:scale-95 duration-200">
-               <span className="text-2xl font-black text-white">3212</span>
-               <span className="text-[10px] text-brand-muted text-center leading-tight font-bold">BETIM / B.H.</span>
-             </Link>
-             <Link href="/linha/50" prefetch={false} className="surface-card flex flex-col items-center justify-center py-5 gap-2 hover:border-brand-primary transition-colors hover:scale-[0.98] active:scale-95 duration-200">
-               <span className="text-2xl font-black text-white">50</span>
-               <span className="text-[10px] text-brand-muted text-center leading-tight font-bold">HOSP. REGIONAL</span>
-             </Link>
+          <div className="space-y-4">
+            <h2 className="text-xs font-bold tracking-[0.1em] text-brand-muted uppercase px-1 border-b border-[rgba(255,255,255,0.05)] pb-2">FREQUENTES EM BETIM</h2>
+            <div className="grid grid-cols-2 gap-4">
+               <Link href="/linha/3212" prefetch={false} className="bg-brand-surface border border-[rgba(255,255,255,0.05)] rounded-xl flex flex-col items-center justify-center py-6 gap-2 hover:border-[#007BFF] transition-all hover:scale-[1.03] active:scale-95 duration-200">
+                 <span className="text-3xl font-black text-white">3212</span>
+                 <span className="text-[11px] text-brand-muted text-center leading-tight font-bold tracking-wider">BETIM / B.H.</span>
+               </Link>
+               <Link href="/linha/50" prefetch={false} className="bg-brand-surface border border-[rgba(255,255,255,0.05)] rounded-xl flex flex-col items-center justify-center py-6 gap-2 hover:border-[#007BFF] transition-all hover:scale-[1.03] active:scale-95 duration-200">
+                 <span className="text-3xl font-black text-white">50</span>
+                 <span className="text-[11px] text-brand-muted text-center leading-tight font-bold tracking-wider">HOSP. REGIONAL</span>
+               </Link>
+            </div>
           </div>
         </section>
         
-        <section className="py-2">
-          <AdSpace slot="Home_Footer" format="auto" />
+        <section className="py-8 md:col-span-2">
+          <AdSpace slot="Home_Footer" format="horizontal" />
         </section>
 
         {/* Footer Institucional AdSense */}
-        <section className="pb-8 pt-4 border-t border-[rgba(255,255,255,0.05)] text-center space-y-4">
-           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
-             <Link href="/sobre" prefetch={false} className="hover:text-white transition-colors">Sobre</Link>
+        <section className="pb-8 pt-4 border-t border-[rgba(255,255,255,0.05)] text-center space-y-4 md:col-span-2">
+           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm font-semibold uppercase tracking-wider text-zinc-500">
+             <Link href="/sobre" prefetch={false} className="hover:text-[#007BFF] transition-colors">Sobre</Link>
              <span>&bull;</span>
-             <Link href="/privacidade" prefetch={false} className="hover:text-white transition-colors">Privacidade</Link>
+             <Link href="/privacidade" prefetch={false} className="hover:text-[#007BFF] transition-colors">Privacidade</Link>
              <span>&bull;</span>
-             <Link href="/contato" prefetch={false} className="hover:text-white transition-colors">Contato</Link>
+             <Link href="/contato" prefetch={false} className="hover:text-[#007BFF] transition-colors">Contato</Link>
              <span>&bull;</span>
-             <Link href="/noticias" prefetch={false} className="hover:text-white transition-colors">Notícias</Link>
+             <Link href="/noticias" prefetch={false} className="hover:text-[#007BFF] transition-colors">Notícias</Link>
            </div>
-           <p className="text-[10px] text-zinc-600">&copy; 2026 FlowIQ. Betim Bus é uma plataforma independente.</p>
+           <p className="text-[11px] text-zinc-600">&copy; 2026 FlowIQ. Betim Bus é uma plataforma independente.</p>
         </section>
 
       </div>

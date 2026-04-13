@@ -22,8 +22,17 @@ export function useLocation() {
       return;
     }
 
+    const timeoutId = setTimeout(() => {
+      setLocation(prev => ({
+        ...prev,
+        loading: false,
+        error: 'Tempo excedido. Localização indisponível.'
+      }));
+    }, 6000);
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        clearTimeout(timeoutId);
         setLocation({
           lat: position.coords.latitude,
           lon: position.coords.longitude,
@@ -32,6 +41,7 @@ export function useLocation() {
         });
       },
       (error) => {
+        clearTimeout(timeoutId);
         setLocation({
           lat: null,
           lon: null,
@@ -41,10 +51,12 @@ export function useLocation() {
       },
       {
         enableHighAccuracy: true,
-        timeout: 10000,
+        timeout: 5000,
         maximumAge: 0,
       }
     );
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return location;

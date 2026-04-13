@@ -52,6 +52,10 @@ export default function PontosHomeWrapper() {
             <span className="w-2 h-2 rounded-full bg-brand-secondary animate-pulse shadow-[0_0_12px_rgba(0,242,255,0.8)]"></span>
             GPS Ativo
           </span>
+        ) : location.error ? (
+          <span className="text-[10px] text-red-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
+            Erro de Localização
+          </span>
         ) : location.loading ? (
           <span className="text-[10px] text-brand-muted font-bold uppercase tracking-widest flex items-center gap-1.5">
             Buscando sinal...
@@ -86,13 +90,23 @@ export default function PontosHomeWrapper() {
               </div>
             </div>
           </Link>
+        ) : location.error ? (
+          <Link href="/planejar" prefetch={false} className="block">
+            <div className="surface-card p-5 group flex flex-col items-center justify-center gap-2 text-center border-red-900/30 bg-red-900/10 hover:border-brand-primary transition-all rounded-xl md:hover:scale-[1.02]">
+               <MapPin className="text-red-400 group-hover:text-brand-primary transition-colors" size={24} />
+               <div>
+                  <span className="text-[13px] font-bold text-white block">Localização indisponível</span>
+                  <span className="text-[11px] text-[#8A94A6] font-bold mt-1">Busque um ponto pelo nome ou abra o mapa interativo. Tocar para buscar.</span>
+               </div>
+            </div>
+          </Link>
         ) : (
           <Link href="/pontos" prefetch={false} className="block">
-            <div className="surface-card p-5 group flex flex-col items-center justify-center gap-2 text-center hover:border-brand-primary transition-all">
+            <div className="surface-card p-5 group flex flex-col items-center justify-center gap-2 text-center hover:border-brand-primary transition-all rounded-xl md:hover:scale-[1.02]">
                <MapPin className="text-brand-muted group-hover:text-brand-secondary transition-colors" size={24} />
                <div>
                   <span className="text-[13px] font-bold text-white block">Explorar mapa de paradas</span>
-                  <span className="text-[11px] text-brand-muted font-bold">Ative a localização para ver pontos próximos</span>
+                  <span className="text-[11px] text-[#8A94A6] font-bold mt-1">Ative a localização para ver pontos próximos</span>
                </div>
             </div>
           </Link>

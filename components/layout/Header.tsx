@@ -14,8 +14,17 @@ export function Header() {
       
       <div className="flex items-center gap-4">
         {/* Desktop items */}
-        <div className="hidden md:flex items-center gap-4">
-          <Link href="/noticias" className="text-sm text-[#8A94A6] hover:text-white transition-colors">
+        <div className="hidden md:flex items-center gap-6">
+          <Link href="/linhas" className="text-sm font-medium text-[#8A94A6] hover:text-white transition-colors">
+            Linhas
+          </Link>
+          <Link href="/pontos" className="text-sm font-medium text-[#8A94A6] hover:text-white transition-colors">
+            Pontos
+          </Link>
+          <Link href="/mapa" className="text-sm font-medium text-[#8A94A6] hover:text-white transition-colors">
+            Mapa
+          </Link>
+          <Link href="/noticias" className="text-sm font-medium text-[#8A94A6] hover:text-white transition-colors">
             Notícias
           </Link>
           

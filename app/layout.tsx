@@ -47,8 +47,6 @@ export const viewport: Viewport = {
   themeColor: "#121826",
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1, 
-  userScalable: false, // Force "app-like" behavior
   viewportFit: "cover"
 }
 
@@ -61,8 +59,8 @@ export default function RootLayout({
     <html lang="pt-BR" className="dark" suppressHydrationWarning>
       <body className={`${inter.className} bg-black text-brand-text h-screen overflow-hidden flex flex-col items-center justify-center`} suppressHydrationWarning>
         
-        {/* Main Wrapper imitando fisicamente o chassi de um smartphone com BG nativo */}
-        <div className="w-full h-full max-w-[480px] mx-auto relative bg-brand-bg shadow-[0_0_100px_rgba(0,0,0,0.8)] border-x border-[rgba(255,255,255,0.05)] sm:border-y sm:h-[95vh] sm:rounded-[40px] overflow-hidden flex flex-col">
+        {/* Main Wrapper imitando chassi de smartphone no mobile, e full width stretch no PC */}
+        <div className="w-full h-full max-w-[480px] md:max-w-none md:rounded-none md:h-screen md:border-none md:shadow-none mx-auto relative bg-brand-bg shadow-[0_0_100px_rgba(0,0,0,0.8)] border-x border-[rgba(255,255,255,0.05)] sm:border-y sm:h-[95vh] sm:rounded-[40px] overflow-hidden flex flex-col">
           
           <main className="flex-1 w-full relative overflow-y-auto">
             {children}

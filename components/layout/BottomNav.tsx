@@ -16,7 +16,7 @@ export default function BottomNav() {
   ];
 
   return (
-    <nav className="w-full bg-brand-surface border-t border-[rgba(255,255,255,0.05)] z-50 shrink-0">
+    <nav className="w-full bg-brand-surface border-t border-[rgba(255,255,255,0.05)] z-50 shrink-0 md:hidden">
       <div className="w-full flex justify-between px-6 py-2 pb-safe mb-1">
         {navItems.map((item) => {
           const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
