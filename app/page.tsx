@@ -1,5 +1,6 @@
-import { Search, MapPin, Bus, Clock, Bell, ChevronRight } from 'lucide-react';
+import { Search } from 'lucide-react';
 import Link from 'next/link';
+import { ROUTES, createRouteSlug } from '@/lib/linhas';
 import { AdSpace } from '@/components/ui/AdSpace';
 import { Header } from '@/components/layout/Header';
 import FavoritosHomeWrapper from '@/components/favoritos/FavoritosHomeWrapper';
@@ -48,19 +49,23 @@ export default function Home() {
           <div className="space-y-4">
             <h2 className="text-xs font-bold tracking-[0.1em] text-brand-muted uppercase px-1 border-b border-[rgba(255,255,255,0.05)] pb-2">FREQUENTES EM BETIM</h2>
             <div className="grid grid-cols-2 gap-4">
-              {frequentes.slice(0, 8).map((linha, index) => (
-                <Link 
-                  key={linha.id} 
-                  href={`/linha/${linha.id}`} 
-                  prefetch={false} 
-                  className={`bg-brand-surface border border-[rgba(255,255,255,0.05)] rounded-xl flex-col items-center justify-center py-6 gap-2 hover:border-[#007BFF] transition-all hover:scale-[1.03] active:scale-95 duration-200 ${
-                    index >= 4 ? 'hidden lg:flex' : 'flex'
-                  }`}
-                >
-                  <span className="text-3xl font-black text-white">{linha.num}</span>
-                  <span className="text-[11px] text-brand-muted text-center leading-tight font-bold tracking-wider px-1">{linha.nome}</span>
-                </Link>
-              ))}
+              {frequentes.slice(0, 8).map((linha, index) => {
+                // Procurando no ROUTES pelo value exato para gerar o slug longo automático
+                const routeObj = ROUTES.find(r => r.value === linha.id) || { name: linha.nome, value: linha.id };
+                return (
+                  <Link 
+                    key={linha.id} 
+                    href={`/linha/${createRouteSlug(routeObj)}`} 
+                    prefetch={false} 
+                    className={`bg-brand-surface border border-[rgba(255,255,255,0.05)] rounded-xl flex-col items-center justify-center py-6 gap-2 hover:border-[#007BFF] transition-all hover:scale-[1.03] active:scale-95 duration-200 ${
+                      index >= 4 ? 'hidden lg:flex' : 'flex'
+                    }`}
+                  >
+                    <span className="text-3xl font-black text-white">{linha.num}</span>
+                    <span className="text-[11px] text-brand-muted text-center leading-tight font-bold tracking-wider px-1">{linha.nome}</span>
+                  </Link>
+                )
+              })}
             </div>
           </div>
         </section>

@@ -45,3 +45,15 @@ export const ROUTES = [
   { name: "920 - Jardim Paulista / Hospital Regional", value: "4ev8" },
   { name: "PE67 - Terminal Rodoviário / Mater Dei", value: "4dpr" }
 ];
+
+export function createRouteSlug(linha: { name: string, value: string }) {
+  // Converte "50 - Granja Verde / Hosp" para "50-granja-verde-hosp"
+  const slug = linha.name
+    .toLowerCase()
+    .normalize('NFD') // Remove acentuação
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-') // Troca caracteres não alfanuméricos por ifen
+    .replace(/(^-|-$)+/g, ''); // Remove ifens no começo ou fim
+
+  return `${linha.value}-${slug}`;
+}

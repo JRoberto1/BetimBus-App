@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Search, Heart } from 'lucide-react';
 import Link from 'next/link';
 import { useFavoritos } from '@/lib/useFavoritos';
+import { createRouteSlug } from '@/lib/linhas';
 
 import { BackButton } from '@/components/ui/BackButton';
 import { AdSpace } from '@/components/ui/AdSpace';
@@ -46,7 +47,7 @@ export default function LinhasClient({ linhasInicial }: { linhasInicial: any[] }
             
             return (
               <div key={linhaId} className="surface-card flex items-center justify-between p-4 relative">
-                <Link href={`/linha/${linhaId}`} className="flex-1 pr-4 active:scale-95 transition-transform">
+                <Link href={`/linha/${createRouteSlug({ name: linha.name, value: linha.value })}`} className="flex-1 pr-4 active:scale-95 transition-transform">
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2">
                       <span className="text-brand-primary font-bold text-xl">{linha.name.split(' - ')[0]}</span>

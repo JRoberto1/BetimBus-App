@@ -5,10 +5,10 @@ import { AdSpace } from '@/components/ui/AdSpace';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
-  const id = resolvedParams.id;
+  const hashId = resolvedParams.id.split('-')[0];
   
   try {
-    const info = await getLinhaInfo(id);
+    const info = await getLinhaInfo(hashId);
     const num = info.numeroLinha || '';
     const nome = info.nomeLinha || 'Rota de Ônibus';
     const title = `Linha ${num} Betim — Horários e Itinerário | Betim Bus`;
@@ -33,7 +33,8 @@ export default async function LinhaDetailsPage({
   params: Promise<{ id: string }>
 }) {
   const resolvedParams = await params;
-  const linhaId = resolvedParams.id;
+  const rawId = resolvedParams.id;
+  const linhaId = rawId.split('-')[0]; // Extrai "4evb" de "4evb-50-hospital"
   
   // Pegando dados do proxy Vercel (Etapa 1)
   const info = await getLinhaInfo(linhaId);

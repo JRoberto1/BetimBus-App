@@ -3,7 +3,7 @@
 import { HeartOff, Search, Heart } from 'lucide-react';
 import Link from 'next/link';
 import { useFavoritos } from '@/lib/useFavoritos';
-import { ROUTES } from '@/lib/linhas';
+import { ROUTES, createRouteSlug } from '@/lib/linhas';
 import { BackButton } from '@/components/ui/BackButton';
 
 export default function FavoritosPage() {
@@ -40,7 +40,7 @@ export default function FavoritosPage() {
             
             return (
               <div key={linhaId} className="surface-card flex items-center justify-between p-4 relative">
-                <Link href={`/linha/${linhaId}`} className="flex-1 pr-4 active:scale-95 transition-transform">
+                <Link href={`/linha/${createRouteSlug(linha)}`} className="flex-1 pr-4 active:scale-95 transition-transform">
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-2">
                       <span className="text-brand-primary font-bold text-xl">{linha.name.split(' - ')[0]}</span>
