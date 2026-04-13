@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useFavoritos } from '@/lib/useFavoritos';
 
 import { BackButton } from '@/components/ui/BackButton';
+import { AdSpace } from '@/components/ui/AdSpace';
 
 export default function LinhasClient({ linhasInicial }: { linhasInicial: any[] }) {
   const [busca, setBusca] = useState('');
@@ -68,6 +69,11 @@ export default function LinhasClient({ linhasInicial }: { linhasInicial: any[] }
             );
           })
         )}
+        
+        {/* AdSense Slot */}
+        <div className="mt-4">
+           <AdSpace slot="Linhas_List" format="rectangle" />
+        </div>
       </section>
     </>
   );

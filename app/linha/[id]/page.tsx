@@ -1,6 +1,7 @@
 import { getLinhaInfo, getHorarios } from '@/lib/api';
 import LinhaTabsLayout from '@/components/linha/LinhaTabsLayout';
 import { Metadata } from 'next';
+import { AdSpace } from '@/components/ui/AdSpace';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
@@ -41,11 +42,18 @@ export default async function LinhaDetailsPage({
   return (
     <div className="flex flex-col min-h-screen">
       {/* Container de Controle Client Component que fará gestão das 4 abas */}
-      <LinhaTabsLayout 
-        linhaId={linhaId} 
-        info={info} 
-        horarios={horarios} 
-      />
+      <div className="flex-1 w-full max-w-[1600px] mx-auto">
+        <LinhaTabsLayout 
+          linhaId={linhaId} 
+          info={info} 
+          horarios={horarios} 
+        />
+      </div>
+      
+      {/* AdSpace Fixa da Tela de Linha */}
+      <div className="px-4 py-6 bg-brand-bg relative z-10 block">
+        <AdSpace slot="Linha_Detail_Footer" format="horizontal" />
+      </div>
     </div>
   );
 }

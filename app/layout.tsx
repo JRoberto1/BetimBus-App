@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/Footer";
 import { InstallBanner } from "@/components/ui/InstallBanner";
 import PwaRegister from "@/components/PwaRegister";
 import { Analytics } from "@vercel/analytics/react";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -58,6 +59,14 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="dark" suppressHydrationWarning>
       <body className={`${inter.className} bg-black text-brand-text h-screen overflow-hidden flex flex-col items-center justify-center`} suppressHydrationWarning>
+        
+        {/* AdSense Base Script */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000"
+          crossOrigin="anonymous"
+          strategy="lazyOnload"
+        />
         
         {/* Main Wrapper imitando chassi de smartphone no mobile, e full width stretch no PC */}
         <div className="w-full h-full max-w-[480px] md:max-w-none md:rounded-none md:h-screen md:border-none md:shadow-none mx-auto relative bg-brand-bg shadow-[0_0_100px_rgba(0,0,0,0.8)] border-x border-[rgba(255,255,255,0.05)] sm:border-y sm:h-[95vh] sm:rounded-[40px] overflow-hidden flex flex-col">
