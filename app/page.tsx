@@ -23,10 +23,10 @@ export default function Home() {
     <div className="flex flex-col min-h-screen pb-24">
       <Header />
 
-      <div className="px-5 pt-6 space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-8 max-w-7xl mx-auto">
+      <div className="px-5 pt-6 space-y-8 md:space-y-0 md:grid lg:grid-cols-12 md:gap-8 w-full max-w-[1600px] mx-auto">
         
-        {/* Search & Planner - Takes full width on desktop if needed, or left column */}
-        <section className="md:col-span-2 lg:col-span-1 flex flex-col justify-center">
+        {/* Search & Planner - Takes larger area on desktop */}
+        <section className="lg:col-span-7 flex flex-col justify-start pt-2">
           <Link href="/planejar" prefetch={false} className="block relative group">
             <div className="w-full bg-brand-surface border border-[rgba(255,255,255,0.05)] rounded-xl py-6 flex items-center justify-center gap-3 shadow-md hover:bg-[#20283A] transition-all hover:scale-[1.02] hover:border-[#007BFF]/50 duration-300 group-hover:shadow-[0_0_20px_rgba(0,123,255,0.2)]">
               <Search className="text-[#00F2FF] group-hover:scale-110 transition-transform" size={24} />
@@ -42,7 +42,7 @@ export default function Home() {
         </section>
 
         {/* Módulo Embutido de Pontos Próximos and Linhas Frequentes */}
-        <section className="space-y-8 md:col-span-2 lg:col-span-1">
+        <section className="space-y-8 lg:col-span-5">
           <div className="space-y-4">
             <PontosHomeWrapper />
           </div>
@@ -67,7 +67,7 @@ export default function Home() {
           </div>
         </section>
         
-        <section className="py-8 md:col-span-2">
+        <section className="py-8 lg:col-span-12">
           <AdSpace slot="Home_Footer" format="horizontal" />
         </section>
 
