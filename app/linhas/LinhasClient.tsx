@@ -4,6 +4,8 @@ import { Search, Heart } from 'lucide-react';
 import Link from 'next/link';
 import { useFavoritos } from '@/lib/useFavoritos';
 
+import { BackButton } from '@/components/ui/BackButton';
+
 export default function LinhasClient({ linhasInicial }: { linhasInicial: any[] }) {
   const [busca, setBusca] = useState('');
   const { isFavorito, toggleFavorito } = useFavoritos();
@@ -16,7 +18,10 @@ export default function LinhasClient({ linhasInicial }: { linhasInicial: any[] }
   return (
     <>
       <header className="flex flex-col gap-4 pt-4">
-        <h1 className="text-2xl font-bold tracking-tight text-white">Todas as Linhas</h1>
+        <div className="flex items-center gap-2">
+          <BackButton />
+          <h1 className="text-2xl font-bold tracking-tight text-white">Todas as Linhas</h1>
+        </div>
         
         <div className="relative">
           <input 

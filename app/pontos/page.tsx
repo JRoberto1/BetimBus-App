@@ -4,6 +4,7 @@ import { Search, MapPin, Bus, ChevronRight, Menu, Map } from 'lucide-react';
 import Link from 'next/link';
 import { calculateDistance, formatDistance } from '@/lib/geo';
 import { useLocation } from '@/lib/useLocation';
+import { BackButton } from '@/components/ui/BackButton';
 
 // Type definitions
 interface Stop {
@@ -62,9 +63,7 @@ export default function PontosPage() {
       {/* Header */}
       <header className="bg-brand-bg flex justify-between items-center w-full px-6 py-4 h-16 sticky top-0 z-50 border-b border-[rgba(255,255,255,0.02)]">
         <div className="flex items-center gap-3">
-          <Link href="/">
-             <Menu className="text-brand-primary" />
-          </Link>
+          <BackButton />
           <h1 className="text-xl font-black tracking-tighter text-white uppercase">Paradas</h1>
         </div>
       </header>

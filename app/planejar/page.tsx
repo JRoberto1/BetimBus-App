@@ -2,6 +2,7 @@
 import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import JourneyPlannerEngine from '@/components/busca/JourneyPlannerEngine';
+import { BackButton } from '@/components/ui/BackButton';
 
 export default function PlanejadorJornadaPage() {
   return (
@@ -9,9 +10,7 @@ export default function PlanejadorJornadaPage() {
       {/* Header Estrito */}
       <header className="bg-brand-bg flex items-center justify-between w-full px-6 py-4 h-16 sticky top-0 z-50 border-b border-[rgba(255,255,255,0.02)]">
         <div className="flex items-center gap-4">
-          <Link href="/" prefetch={false}>
-             <ChevronLeft className="text-brand-primary" size={24} />
-          </Link>
+          <BackButton />
           <h1 className="text-lg font-black tracking-tight text-white uppercase">Planejar Viagem</h1>
         </div>
       </header>

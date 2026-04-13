@@ -4,6 +4,7 @@ import { ChevronLeft, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import TempoRealEstimativaCard from '@/components/pontos/TempoRealEstimativaCard';
+import { BackButton } from '@/components/ui/BackButton';
 
 interface Stop {
   id: number;
@@ -58,9 +59,7 @@ export default function PontoDetalhesPage() {
       {/* Header */}
       <header className="bg-brand-bg flex items-center justify-between w-full px-6 py-4 h-16 sticky top-0 z-50 border-b border-[rgba(255,255,255,0.02)]">
         <div className="flex items-center gap-3">
-          <Link href="/pontos" prefetch={false}>
-             <ChevronLeft className="text-brand-primary" size={24} />
-          </Link>
+          <BackButton />
           <span className="text-brand-muted text-xs font-bold tracking-widest uppercase">ID: {ponto.id}</span>
         </div>
       </header>

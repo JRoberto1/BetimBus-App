@@ -24,21 +24,15 @@ export default function PontosHomeWrapper() {
       .catch(err => console.error('Failed to load pontos.json', err));
   }, []);
 
-  const closestPoint = useMemo(() => {
-    if (!pontos.length || !location.lat || !location.lon) return null;
+  const closestPoints = useMemo(() => {
+    if (!pontos.length || !location.lat || !location.lon) return [];
     
-    let minDiff = Infinity;
-    let closest: (Stop & { distanceMeters: number }) | null = null;
-    
-    for (const p of pontos) {
-      const dist = calculateDistance(location.lat, location.lon, p.lat, p.lon);
-      if (dist < minDiff) {
-        minDiff = dist;
-        closest = { ...p, distanceMeters: dist };
-      }
-    }
-    
-    return closest;
+    const sorted = [...pontos]
+      .map(p => ({ ...p, distanceMeters: calculateDistance(location.lat!, location.lon!, p.lat, p.lon) }))
+      .sort((a, b) => a.distanceMeters - b.distanceMeters);
+      
+    // Returns top 8
+    return sorted.slice(0, 8);
   }, [pontos, location]);
 
   const hasGps = location.lat && location.lon;
@@ -68,28 +62,30 @@ export default function PontosHomeWrapper() {
            <div className="surface-card p-4 text-center">
              <span className="text-brand-muted text-xs animate-pulse">Carregando base de pontos...</span>
            </div>
-        ) : closestPoint ? (
-          <Link href={`/pontos/${closestPoint.id}`} prefetch={false} className="block">
-            <div className="surface-card p-4 transition-all duration-200 hover:scale-[0.98] group relative overflow-hidden flex flex-col gap-2">
-              <div className="absolute top-0 right-0 p-3 flex flex-col justify-end items-end gap-1">
-                <span className="text-brand-secondary text-sm font-bold tracking-tighter">
-                  {formatDistance(closestPoint.distanceMeters)}
-                </span>
-              </div>
-              
-              <div>
-                <h3 className="text-base font-bold text-white tracking-tight leading-tight pr-12 truncate">{closestPoint.name}</h3>
-              </div>
-              
-              <div className="flex items-center justify-between border-t border-[rgba(255,255,255,0.05)] pt-2 mt-1">
-                <div className="flex items-center gap-2">
-                  <Bus className="text-brand-secondary" size={14} />
-                  <span className="text-[12px] font-bold text-white">Linhas: <span className="text-[11px] text-brand-muted bg-[rgba(255,255,255,0.05)] px-2 py-0.5 rounded font-black tracking-widest">{closestPoint.lines.slice(0, 3).join(', ')}{closestPoint.lines.length > 3 ? '...' : ''}</span></span>
+        ) : closestPoints.length > 0 ? (
+          closestPoints.map((closestPoint, index) => (
+            <Link key={closestPoint.id} href={`/pontos/${closestPoint.id}`} prefetch={false} className={`block ${index >= 4 ? 'hidden md:block' : ''}`}>
+              <div className="surface-card p-4 transition-all duration-200 hover:scale-[0.98] group relative overflow-hidden flex flex-col gap-2">
+                <div className="absolute top-0 right-0 p-3 flex flex-col justify-end items-end gap-1">
+                  <span className="text-brand-secondary text-sm font-bold tracking-tighter">
+                    {formatDistance(closestPoint.distanceMeters)}
+                  </span>
                 </div>
-                <ChevronRight className="text-brand-muted group-hover:translate-x-1 group-hover:text-brand-primary transition-all" size={18} />
+                
+                <div>
+                  <h3 className="text-base font-bold text-white tracking-tight leading-tight pr-12 truncate">{closestPoint.name}</h3>
+                </div>
+                
+                <div className="flex items-center justify-between border-t border-[rgba(255,255,255,0.05)] pt-2 mt-1">
+                  <div className="flex items-center gap-2">
+                    <Bus className="text-brand-secondary" size={14} />
+                    <span className="text-[12px] font-bold text-white">Linhas: <span className="text-[11px] text-brand-muted bg-[rgba(255,255,255,0.05)] px-2 py-0.5 rounded font-black tracking-widest">{closestPoint.lines.slice(0, 3).join(', ')}{closestPoint.lines.length > 3 ? '...' : ''}</span></span>
+                  </div>
+                  <ChevronRight className="text-brand-muted group-hover:translate-x-1 group-hover:text-brand-primary transition-all" size={18} />
+                </div>
               </div>
-            </div>
-          </Link>
+            </Link>
+          ))
         ) : location.error ? (
           <Link href="/planejar" prefetch={false} className="block">
             <div className="surface-card p-5 group flex flex-col items-center justify-center gap-2 text-center border-red-900/30 bg-red-900/10 hover:border-brand-primary transition-all rounded-xl md:hover:scale-[1.02]">

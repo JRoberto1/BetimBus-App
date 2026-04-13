@@ -6,6 +6,19 @@ import FavoritosHomeWrapper from '@/components/favoritos/FavoritosHomeWrapper';
 import PontosHomeWrapper from '@/components/pontos/PontosHomeWrapper';
 
 export default function Home() {
+  const frequentes = [
+    { id: '3212', num: '3212', nome: 'BETIM / B.H.' },
+    { id: '50', num: '50', nome: 'HOSP. REGIONAL' },
+    { id: '3210', num: '3210', nome: 'BETIM / B.H.' },
+    { id: '40', num: '40', nome: 'C. INCONFIDENTES' },
+    { id: '3220', num: '3220', nome: 'BETIM / B.H.' },
+    { id: '3126', num: '3126', nome: 'BARREIRO' },
+    { id: '60', num: '60', nome: 'NOSSA SRA. FÁTIMA' },
+    { id: '61', num: '61', nome: 'ALTEROSAS' },
+    { id: '70', num: '70', nome: 'BANDEIRINHAS' },
+    { id: '90', num: '90', nome: 'VIANÓPOLIS' },
+  ];
+
   return (
     <div className="flex flex-col min-h-screen pb-24">
       <Header />
@@ -37,14 +50,19 @@ export default function Home() {
           <div className="space-y-4">
             <h2 className="text-xs font-bold tracking-[0.1em] text-brand-muted uppercase px-1 border-b border-[rgba(255,255,255,0.05)] pb-2">FREQUENTES EM BETIM</h2>
             <div className="grid grid-cols-2 gap-4">
-               <Link href="/linha/3212" prefetch={false} className="bg-brand-surface border border-[rgba(255,255,255,0.05)] rounded-xl flex flex-col items-center justify-center py-6 gap-2 hover:border-[#007BFF] transition-all hover:scale-[1.03] active:scale-95 duration-200">
-                 <span className="text-3xl font-black text-white">3212</span>
-                 <span className="text-[11px] text-brand-muted text-center leading-tight font-bold tracking-wider">BETIM / B.H.</span>
-               </Link>
-               <Link href="/linha/50" prefetch={false} className="bg-brand-surface border border-[rgba(255,255,255,0.05)] rounded-xl flex flex-col items-center justify-center py-6 gap-2 hover:border-[#007BFF] transition-all hover:scale-[1.03] active:scale-95 duration-200">
-                 <span className="text-3xl font-black text-white">50</span>
-                 <span className="text-[11px] text-brand-muted text-center leading-tight font-bold tracking-wider">HOSP. REGIONAL</span>
-               </Link>
+              {frequentes.map((linha, index) => (
+                <Link 
+                  key={linha.id} 
+                  href={`/linha/${linha.id}`} 
+                  prefetch={false} 
+                  className={`bg-brand-surface border border-[rgba(255,255,255,0.05)] rounded-xl flex-col items-center justify-center py-6 gap-2 hover:border-[#007BFF] transition-all hover:scale-[1.03] active:scale-95 duration-200 ${
+                    index >= 6 ? 'hidden md:flex' : 'flex'
+                  }`}
+                >
+                  <span className="text-3xl font-black text-white">{linha.num}</span>
+                  <span className="text-[11px] text-brand-muted text-center leading-tight font-bold tracking-wider px-1">{linha.nome}</span>
+                </Link>
+              ))}
             </div>
           </div>
         </section>

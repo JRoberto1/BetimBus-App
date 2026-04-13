@@ -5,6 +5,7 @@ import LinhaItinerario from './LinhaItinerario';
 import LinhaHorarios from './LinhaHorarios';
 import LinhaAoVivo from './LinhaAoVivo';
 import dynamic from 'next/dynamic';
+import { BackButton } from '@/components/ui/BackButton';
 
 // Ocultando a engine Leaflet do servidor para não trincar o build Next.js
 const LinhaMapa = dynamic(() => import('./LinhaMapa'), { ssr: false });
@@ -23,12 +24,15 @@ export default function LinhaTabsLayout({ linhaId, info, horarios }: any) {
     <div className="flex flex-col flex-1 h-full">
       
       {/* Cabeçalho da Linha Fixo no topo */}
-      <div className="bg-brand-surface pt-6 pb-2 px-6 border-b border-brand-border sticky top-0 z-20">
-        <h1 className="text-xl font-bold text-white flex items-center gap-2">
-          {info?.[0]?.tripName || 'Carregando destino...'}
-        </h1>
+      <div className="bg-brand-surface pt-6 pb-2 px-6 border-b border-brand-border sticky top-0 z-20 flex flex-col gap-3">
+        <div className="flex items-center gap-2">
+          <BackButton />
+          <h1 className="text-xl font-bold text-white flex items-center gap-2">
+            {info?.[0]?.tripName || 'Carregando destino...'}
+          </h1>
+        </div>
         
-        <div className="flex w-full mt-4 justify-between">
+        <div className="flex w-full justify-between">
           {tabs.map((t) => {
             const Icon = t.icon;
             const isAtivo = activeTab === t.id;
