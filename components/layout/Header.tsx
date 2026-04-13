@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { Menu, X, ChevronDown, Bell } from 'lucide-react'
+import { Menu, X, ChevronDown, Bell, BusFront } from 'lucide-react'
 import { OpenOnMobileButton } from '@/components/ui/OpenOnMobileButton'
 
 export function Header() {
@@ -10,7 +10,15 @@ export function Header() {
 
   return (
     <header className="bg-brand-bg flex justify-between items-center w-full px-6 py-4 h-16 sticky top-0 z-50">
-      <Link href="/" className="text-xl font-black text-white tracking-tighter uppercase">Betim Bus</Link>
+      <Link href="/" className="flex items-center gap-2 group cursor-pointer select-none" aria-label="Ir para a Home">
+        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-brand-primary shadow-[0_0_15px_rgba(0,255,100,0.2)] group-hover:shadow-[0_0_20px_rgba(0,255,100,0.4)] group-hover:scale-105 transition-all">
+          <BusFront size={20} className="text-[#0a0f18]" strokeWidth={2.5} />
+        </div>
+        <div className="flex flex-col">
+          <span className="text-lg leading-none font-black text-white tracking-tighter uppercase">Betim</span>
+          <span className="text-[10px] leading-none font-bold text-brand-primary tracking-[0.2em] uppercase mt-[2px]">Bus APP</span>
+        </div>
+      </Link>
       
       <div className="flex items-center gap-4">
         {/* Desktop items */}
