@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import BottomNav from "@/components/layout/BottomNav";
+import { Footer } from "@/components/layout/Footer";
+import { InstallBanner } from "@/components/ui/InstallBanner";
 import PwaRegister from "@/components/PwaRegister";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -64,9 +66,11 @@ export default function RootLayout({
           
           <main className="flex-1 w-full relative overflow-y-auto">
             {children}
+            <Footer />
           </main>
           
           <BottomNav />
+          <InstallBanner />
           <PwaRegister />
           <Analytics />
           

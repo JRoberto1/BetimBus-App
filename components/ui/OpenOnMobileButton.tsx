@@ -1,28 +1,25 @@
-// components/ui/OpenOnMobileButton.tsx
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Smartphone } from 'lucide-react'
 import { QRCodeModal } from './QRCodeModal'
 import { isMobile } from '@/lib/device'
 
 export function OpenOnMobileButton() {
   const [open, setOpen] = useState(false)
-  const [isMob, setIsMob] = useState(true)
 
-  useEffect(() => {
-    setIsMob(isMobile())
-  }, [])
-
-  if (isMob) return null
+  // Não renderiza no mobile — só no desktop
+  if (typeof navigator !== 'undefined' && isMobile()) return null
 
   return (
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-brand-primary text-white text-xs font-bold uppercase tracking-wider hover:bg-brand-primary/80 transition-colors shadow-lg"
+        className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg
+                   bg-[#007BFF] text-white text-sm font-medium
+                   hover:bg-[#007BFF]/90 transition-colors"
       >
         <Smartphone size={16} />
-        Usar no Celular
+        Abrir no celular
       </button>
       <QRCodeModal open={open} onClose={() => setOpen(false)} />
     </>

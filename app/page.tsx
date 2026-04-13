@@ -1,21 +1,14 @@
 import { Search, MapPin, Bus, Clock, Bell, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { AdSpace } from '@/components/ui/AdSpace';
-import { OpenOnMobileButton } from '@/components/ui/OpenOnMobileButton';
+import { Header } from '@/components/layout/Header';
 import FavoritosHomeWrapper from '@/components/favoritos/FavoritosHomeWrapper';
 import PontosHomeWrapper from '@/components/pontos/PontosHomeWrapper';
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen pb-24">
-      {/* Header Original */}
-      <header className="bg-brand-bg flex justify-between items-center w-full px-6 py-4 h-16 sticky top-0 z-50">
-        <h1 className="text-xl font-black text-brand-primary tracking-tighter uppercase">Betim Bus</h1>
-        <div className="flex items-center gap-4">
-          <OpenOnMobileButton />
-          <Bell className="text-brand-muted hover:text-white transition-colors" size={20} />
-        </div>
-      </header>
+      <Header />
 
       <div className="px-5 pt-6 space-y-8">
         

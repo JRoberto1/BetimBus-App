@@ -1,16 +1,15 @@
-// components/ui/QRCodeModal.tsx
 'use client'
-import { X } from 'lucide-react'
+import { X, Smartphone } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
 
-interface QRCodeModalProps {
+interface Props {
   open: boolean
   onClose: () => void
 }
 
-export function QRCodeModal({ open, onClose }: QRCodeModalProps) {
+export function QRCodeModal({ open, onClose }: Props) {
   if (!open) return null
-  const url = 'https://betim-bus-app.vercel.app' // Atualizei para o fallback imediato ate dominar
+  const url = 'https://betimbus.com.br'
 
   return (
     <div
@@ -18,19 +17,22 @@ export function QRCodeModal({ open, onClose }: QRCodeModalProps) {
       onClick={onClose}
     >
       <div
-        className="bg-[#121826] rounded-2xl p-8 max-w-sm w-full mx-4 border border-[rgba(255,255,255,0.1)] flex flex-col items-center gap-6 shadow-2xl"
+        className="bg-[#1C2333] rounded-2xl p-8 max-w-sm w-full mx-4 border border-white/10 flex flex-col items-center gap-6"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between w-full">
-          <h2 className="text-white font-semibold text-lg">
-            Abra no seu celular
-          </h2>
-          <button onClick={onClose} className="text-zinc-400 hover:text-white transition-colors">
+          <div className="flex items-center gap-2">
+            <Smartphone size={20} className="text-[#007BFF]" />
+            <h2 className="text-white font-semibold text-lg">
+              Abra no seu celular
+            </h2>
+          </div>
+          <button onClick={onClose} className="text-[#8A94A6] hover:text-white transition-colors">
             <X size={20} />
           </button>
         </div>
 
-        <div className="bg-white p-4 rounded-xl shadow-[0_0_20px_rgba(0,123,255,0.3)]">
+        <div className="bg-white p-4 rounded-xl">
           <QRCodeSVG
             value={url}
             size={200}
@@ -40,14 +42,17 @@ export function QRCodeModal({ open, onClose }: QRCodeModalProps) {
           />
         </div>
 
-        <div className="text-center space-y-2">
-          <p className="text-white/90 text-sm font-medium">1. Aponte a câmera do celular no código</p>
-          <p className="text-white/80 text-sm">2. Toque no link que aparecer</p>
-          <p className="text-white/80 text-sm">3. Clique em "Adicionar à tela inicial"</p>
+        <div className="text-center space-y-2 w-full">
+          <p className="text-white text-sm font-medium">Como instalar:</p>
+          <p className="text-[#8A94A6] text-sm">1. Aponte a câmera do celular para o QR Code</p>
+          <p className="text-[#8A94A6] text-sm">2. Toque no link que aparecer</p>
+          <p className="text-[#8A94A6] text-sm">3. Clique em "Adicionar à tela inicial"</p>
         </div>
 
-        <p className="text-zinc-500 text-xs text-center border-t border-[rgba(255,255,255,0.1)] pt-4 w-full">
-          Ou digite no celular <span className="text-brand-primary">betim-bus-app.vercel.app</span>
+        <p className="text-[#8A94A6] text-xs text-center">
+          ou acesse{' '}
+          <span className="text-[#00F2FF]">betimbus.com.br</span>
+          {' '}no navegador do celular
         </p>
       </div>
     </div>
