@@ -81,13 +81,22 @@ export default function TempoRealEstimativaCard({ linhaNomeCurto, stopId, pontoL
   
   if (data && data.vehicles && data.vehicles.length > 0 && pontoLat && pontoLon) {
     // Calcular a distância de cada veículo pro ponto
-    vehiclesFiltrados = data.vehicles.map((veh: any) => {
-      const distanceKm = getDistanceFromLatLonInKm(pontoLat, pontoLon, veh.lat, veh.lon);
-      // Assumindo fator urbano de trajeto reto x2, e velocidade média de 15km/h
-      // Tempo (h) = Distancia(km) / 15 ... x 60 min
-      const minDistance = Math.ceil((distanceKm * 1.5 / 15) * 60); 
-      return { ...veh, distanceKm, estimation: minDistance };
-    }).sort((a: any, b: any) => a.distanceKm - b.distanceKm); // Pega o mais rápido/próximo
+    vehiclesFiltrados = data.vehicles
+      .filter((veh: any) => {
+        const fusoOffsetMs = 3 * 60 * 60 * 1000;
+        const dataNowReal = Date.now() - fusoOffsetMs;
+        const diffMs = dataNowReal - veh.pt;
+        const diffMin = Math.max(0, Math.floor(diffMs / 60000));
+        return diffMin <= 15; // Tolerância um pouco maior para pontos pra não sumir o card à toa
+      })
+      .map((veh: any) => {
+        const distanceKm = getDistanceFromLatLonInKm(pontoLat, pontoLon, veh.lat, veh.lon);
+        // Assumindo fator urbano de trajeto reto x2, e velocidade média de 15km/h
+        // Tempo (h) = Distancia(km) / 15 ... x 60 min
+        const minDistance = Math.ceil((distanceKm * 1.5 / 15) * 60); 
+        return { ...veh, distanceKm, estimation: minDistance };
+      })
+      .sort((a: any, b: any) => a.distanceKm - b.distanceKm); // Pega o mais rápido/próximo
   }
 
   const hasVehicle = vehiclesFiltrados.length > 0;

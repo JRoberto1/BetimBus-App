@@ -6,9 +6,13 @@ import { getTempoReal } from '@/lib/api';
 function VeiculoAoVivoCard({ ev }: { ev: any }) {
   const [endereco, setEndereco] = useState<string | null>(null);
 
-  // Calcular frescor do sinal
-  const diffMs = Date.now() - ev.pt;
-  const diffMin = Math.floor(diffMs / 60000);
+  // A API da Mobilibus retorna o Timestamp ignorando o UTC.
+  // Ex: 06h20 em Betim vem como 06h20 em GMT (Diferença real de 3h errada na Vercel).
+  // Ajustamos o relógio local pra equiparar ao da API subtraindo 3 horas do Date.now().
+  const fusoOffsetMs = 3 * 60 * 60 * 1000;
+  const dataNowReal = Date.now() - fusoOffsetMs;
+  const diffMs = dataNowReal - ev.pt;
+  const diffMin = Math.max(0, Math.floor(diffMs / 60000));
   
   const isSinalInstavel = diffMin >= 2;
 
@@ -102,8 +106,10 @@ export default function LinhaAoVivo({ linhaId, info }: { linhaId: string, info: 
 
   // Filtrar veículos cujo sinal parou de atualizar há mais de 10 minutos
   const activeVehicles = data?.vehicles?.filter((ev: any) => {
-    const diffMs = Date.now() - ev.pt;
-    const diffMin = Math.floor(diffMs / 60000);
+    const fusoOffsetMs = 3 * 60 * 60 * 1000;
+    const dataNowReal = Date.now() - fusoOffsetMs;
+    const diffMs = dataNowReal - ev.pt;
+    const diffMin = Math.max(0, Math.floor(diffMs / 60000));
     return diffMin <= 10;
   }) || [];
 
