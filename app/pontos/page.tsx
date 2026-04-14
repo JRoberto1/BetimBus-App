@@ -5,6 +5,22 @@ import Link from 'next/link';
 import { calculateDistance, formatDistance } from '@/lib/geo';
 import { useLocation } from '@/lib/useLocation';
 import { BackButton } from '@/components/ui/BackButton';
+import { PONTOS_OVERRIDES } from '@/lib/pontosPatch';
+
+// Helper de Normalização e Tolerância
+const normalizeString = (str: string) => {
+  let normalized = str.toLowerCase();
+  // Remove acentos
+  normalized = normalized.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  // Expande prefixos com e sem ponto
+  normalized = normalized.replace(/\b(av|av\.)\b/g, 'avenida');
+  normalized = normalized.replace(/\b(r|r\.)\b/g, 'rua');
+  // Remove pontuação de separação visual
+  normalized = normalized.replace(/[.,-]/g, ' ');
+  // "Mini-Fuzzy": Remove "s" no final das palavras (singularização básica para erros como Campos/Campo, Alterosas/Alterosa)
+  normalized = normalized.replace(/\b(\w{3,})s\b/g, '$1'); 
+  return normalized.replace(/\s+/g, ' ').trim();
+};
 
 // Type definitions
 interface Stop {
@@ -24,7 +40,26 @@ export default function PontosPage() {
     // Fetch local json file
     fetch('/data/pontos.json')
       .then(res => res.json())
-      .then(data => setPontos(data))
+      .then((data: Stop[]) => {
+        // Applica as sobreposições controladas (Patches de DB sujos)
+        const patchedData = data.map(stop => {
+          const patch = PONTOS_OVERRIDES[stop.id];
+          if (patch) {
+            let newLines = [...stop.lines];
+            if (patch.forceLines) {
+              const toInject = patch.forceLines.filter(fl => !newLines.includes(fl));
+              newLines = [...newLines, ...toInject];
+            }
+            return {
+              ...stop,
+              name: patch.correctName || stop.name,
+              lines: newLines
+            };
+          }
+          return stop;
+        });
+        setPontos(patchedData);
+      })
       .catch(err => console.error('Failed to load pontos.json', err));
   }, []);
 
@@ -33,8 +68,19 @@ export default function PontosPage() {
     let filtered = pontos;
 
     if (searchQuery.trim().length > 0) {
-      const lowerQuery = searchQuery.toLowerCase();
-      filtered = filtered.filter(p => p.name.toLowerCase().includes(lowerQuery) || p.lines.some(l => l.includes(lowerQuery)));
+      const normalizedQueryTokens = normalizeString(searchQuery).split(' ');
+      
+      filtered = filtered.filter(p => {
+        const normalizedName = normalizeString(p.name);
+        // Todas palavras digitadas precisam existir no nome (em qualquer ordem)
+        const nameMatches = normalizedQueryTokens.every(token => normalizedName.includes(token));
+        
+        // Pesquisa nas linhas manteremos mais exato para evitar que "10" ative "410", etc se digitado puro, embora .includes faça isso.
+        const queryRaw = searchQuery.trim().toLowerCase();
+        const lineMatches = p.lines.some(l => l.toLowerCase() === queryRaw || l.toLowerCase().includes(queryRaw));
+        
+        return nameMatches || lineMatches;
+      });
     }
 
     if (location.lat && location.lon) {

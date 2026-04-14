@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Bus, ChevronRight, MapPin } from 'lucide-react';
 import { calculateDistance, formatDistance } from '@/lib/geo';
 import { useLocation } from '@/lib/useLocation';
+import { PONTOS_OVERRIDES } from '@/lib/pontosPatch';
 
 interface Stop {
   id: number;
@@ -20,7 +21,26 @@ export default function PontosHomeWrapper() {
   useEffect(() => {
     fetch('/data/pontos.json')
       .then(res => res.json())
-      .then(data => setPontos(data))
+      .then((data: Stop[]) => {
+        // Applica as sobreposições controladas (Patches de DB sujos)
+        const patchedData = data.map(stop => {
+          const patch = PONTOS_OVERRIDES[stop.id];
+          if (patch) {
+            let newLines = [...stop.lines];
+            if (patch.forceLines) {
+              const toInject = patch.forceLines.filter(fl => !newLines.includes(fl));
+              newLines = [...newLines, ...toInject];
+            }
+            return {
+              ...stop,
+              name: patch.correctName || stop.name,
+              lines: newLines
+            };
+          }
+          return stop;
+        });
+        setPontos(patchedData);
+      })
       .catch(err => console.error('Failed to load pontos.json', err));
   }, []);
 
