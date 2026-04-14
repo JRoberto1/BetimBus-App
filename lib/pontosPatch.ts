@@ -7,7 +7,6 @@
  */
 
 export interface PontoPatch {
-  id: number;
   // Nome corrigido do ponto (pode ser omitido se o nome nativo for aceitável)
   correctName?: string;
   // Linhas que DEVEM ser injetadas neste ponto (pois a API as omitiu)
