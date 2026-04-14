@@ -7,9 +7,24 @@ import Link from 'next/link';
 interface TempoRealEstimativaCardProps {
   linhaNomeCurto: string;
   stopId: string;
+  pontoLat?: number;
+  pontoLon?: number;
 }
 
-export default function TempoRealEstimativaCard({ linhaNomeCurto, stopId }: TempoRealEstimativaCardProps) {
+// Haversine distance em KM
+function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371; // Raio da terra em km
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+export default function TempoRealEstimativaCard({ linhaNomeCurto, stopId, pontoLat, pontoLon }: TempoRealEstimativaCardProps) {
   const [inView, setInView] = useState(false);
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -62,8 +77,22 @@ export default function TempoRealEstimativaCard({ linhaNomeCurto, stopId }: Temp
 
   if (!routeValue) return null;
 
-  const hasVehicle = data && data.vehicles && data.vehicles.length > 0;
+  let vehiclesFiltrados: any[] = [];
+  
+  if (data && data.vehicles && data.vehicles.length > 0 && pontoLat && pontoLon) {
+    // Calcular a distância de cada veículo pro ponto
+    vehiclesFiltrados = data.vehicles.map((veh: any) => {
+      const distanceKm = getDistanceFromLatLonInKm(pontoLat, pontoLon, veh.lat, veh.lon);
+      // Assumindo fator urbano de trajeto reto x2, e velocidade média de 15km/h
+      // Tempo (h) = Distancia(km) / 15 ... x 60 min
+      const minDistance = Math.ceil((distanceKm * 1.5 / 15) * 60); 
+      return { ...veh, distanceKm, estimation: minDistance };
+    }).sort((a: any, b: any) => a.distanceKm - b.distanceKm); // Pega o mais rápido/próximo
+  }
+
+  const hasVehicle = vehiclesFiltrados.length > 0;
   const semSinal = data?.semSinal;
+  const closestVehicle = hasVehicle ? vehiclesFiltrados[0] : null;
 
   return (
     <div ref={cardRef} className="surface-card p-4 group relative overflow-hidden flex flex-col gap-2">
@@ -90,17 +119,17 @@ export default function TempoRealEstimativaCard({ linhaNomeCurto, stopId }: Temp
              <div className="flex items-center gap-1.5 bg-[rgba(0,242,255,0.1)] border border-[rgba(0,242,255,0.2)] px-2.5 py-1 rounded-md">
                 <Clock className="text-brand-secondary" size={12} />
                 <span className="text-[13px] font-black text-brand-secondary">
-                  {data.vehicles[0].estimation} min
+                  {closestVehicle.distanceKm < 0.3 ? 'Chegando' : `${closestVehicle.estimation} min`}
                 </span>
              </div>
            )}
         </div>
       </div>
       
-      {hasVehicle && !semSinal && data.vehicles.length > 1 && (
+      {hasVehicle && !semSinal && vehiclesFiltrados.length > 1 && (
         <div className="border-t border-[rgba(255,255,255,0.05)] mt-2 pt-2 flex items-center gap-2">
            <span className="text-[10px] text-brand-muted font-bold uppercase">
-             Próximo depois deste: {data.vehicles[1].estimation} min
+             Próximo depois deste: {vehiclesFiltrados[1].estimation} min ({vehiclesFiltrados[1].distanceKm.toFixed(1)} km)
            </span>
         </div>
       )}

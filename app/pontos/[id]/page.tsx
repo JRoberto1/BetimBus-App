@@ -60,7 +60,6 @@ export default function PontoDetalhesPage() {
       <header className="bg-brand-bg flex items-center justify-between w-full px-6 py-4 h-16 sticky top-0 z-50 border-b border-[rgba(255,255,255,0.02)]">
         <div className="flex items-center gap-3">
           <BackButton />
-          <span className="text-brand-muted text-xs font-bold tracking-widest uppercase">ID: {ponto.id}</span>
         </div>
       </header>
 
@@ -90,6 +89,8 @@ export default function PontoDetalhesPage() {
                  key={`${linha}-${index}`} 
                  linhaNomeCurto={linha} 
                  stopId={ponto.id.toString()} 
+                 pontoLat={ponto.lat}
+                 pontoLon={ponto.lon}
               />
             ))}
           </div>
